@@ -1,0 +1,5 @@
+E:\уроки\5-Semester\ParallelProgramming\EightQueens\EightQueens\bin\Debug\EightQueens.exe
+E:\уроки\5-Semester\ParallelProgramming\EightQueens\EightQueens\bin\Debug\EightQueens.pdb
+E:\уроки\5-Semester\ParallelProgramming\EightQueens\EightQueens\obj\Debug\EightQueens.csprojResolveAssemblyReference.cache
+E:\уроки\5-Semester\ParallelProgramming\EightQueens\EightQueens\obj\Debug\EightQueens.exe
+E:\уроки\5-Semester\ParallelProgramming\EightQueens\EightQueens\obj\Debug\EightQueens.pdb
