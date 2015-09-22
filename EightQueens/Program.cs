@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,6 +24,7 @@ namespace EightQueens
             Console.ReadKey();
         }
 
+
         class myThread
         {
             int[,] chessBoard = new int[8, 8];
@@ -30,60 +33,82 @@ namespace EightQueens
 
             public ArrayList func()
             {
-                //for (int i = 0; i <= 7; i++)
-                //{
-                int i = 2;
-                //for (int j = 0; j <= 7; j++)
-                //{
-                int j = 4;
-                queue.Clear();
-                queue.Add(i, j);
-                fillChessBoard(i, j, 1);
-                queueFuction();
-                //}
-                //}
+                for (int i = 0; i <= 7; i++)
+                {
+                    for (int j = 0; j <= 7; j++)
+                    {
+                        queue.Clear();
+                        queue.Add(i, j);
+                        fillChessBoard(i, j, 1);
+                        queueFuction();
+                    }
+                }
                 return rezult1;
+            }
+
+
+
+            void checkQueue()
+            {
+                int count = 0;
+                if ((queue.Count() > 0) && (rezult1.Count > 0))
+                {
+                    foreach (var dictionatyRezult in rezult1)
+                    {
+                        Dictionary<int, int> copy = (Dictionary<int, int>)dictionatyRezult;
+                        foreach (var queueElement in queue)
+                        {
+                            foreach (var copyElement in copy)
+                            {
+                                if ((queueElement.Value == copyElement.Value) && (queueElement.Key == copyElement.Key))
+                                {
+                                    count += 1;
+                                }
+                            }
+                        }
+                        if (count == queue.Count())
+                        {
+                            foreach (var element in copy)
+                            {
+                                chessBoard[element.Key, element.Value] = 1;
+                            }
+                        }
+                    }
+                }
             }
 
             void queueFuction()
             {
-                bool flag = false;
-                if (queue.Count != 8)
-                {
-                    for (int i = 0; i <= 7; i++)
-                        for (int j = 0; j <= 7; j++)
-                        {
-                            if (chessBoard[i, j] == 0)
-                            {
-                                flag = true;
-                                queue.Add(i, j);
-                                fillChessBoard(i, j, 1);
-                                queueFuction();
-                            }
-                        }
-                    if (flag == false)
+                for (int i = 0; i <= 7; i++)
+                    for (int j = 0; j <= 7; j++)
                     {
-                        if (queue.Keys.Last() == 8)
+                        if (chessBoard[i, j] == 0)
                         {
-                            Console.WriteLine("first");
-                        }
-                        fillChessBoard(queue.Keys.Last(), queue.Values.Last(), 0);
-                        queue.Remove(queue.Keys.Last());
-                        foreach (var element in queue)
-                        {
-                            fillChessBoard(element.Key, element.Value, 1);
-                        }
-                        //Console.WriteLine();
-                    }
-                }
-                else
-                {
-                    foreach (var element in queue)
-                        Console.WriteLine(element.Key + "  " + element.Value);
+                            queue.Add(i, j);
+                            checkQueue();
+                            fillChessBoard(i, j, 1);
+                            queueFuction();
 
-                    rezult1.Add(queue);
-                    Console.WriteLine("find");
-                }
+                            if (queue.Count == 8)
+                            {
+                                foreach (var element in queue)
+                                    Console.WriteLine(element.Key + "  " + element.Value);
+
+                                var copy = new Dictionary<int, int>(queue);
+                                rezult1.Add(copy);
+                                Console.WriteLine("find");
+                            }
+
+                            fillChessBoard(queue.Keys.Last(), queue.Values.Last(), 0);
+                            queue.Remove(queue.Keys.Last());
+                            foreach (var element in queue)
+                            {
+                                fillChessBoard(element.Key, element.Value, 1);
+                            }
+                            checkQueue();
+
+                        }
+                    }
             }
 
             void fillChessBoard(int row, int column, int element)
@@ -99,29 +124,29 @@ namespace EightQueens
                 fillDiagonal(7 - row, column, element, 1, -1, row, column);
                 fillDiagonal(7 - row, 7 - column, element, 1, 1, row, column);
 
-                for (int i = 0; i < 8; i++)
-                {
-                    Console.WriteLine();
-                    for (int j = 0; j < 8; j++)
-                        Console.Write(chessBoard[i, j]);
-                }
-                Console.WriteLine();
+                //for (int i = 0; i < 8; i++)
+                //{
+                //    Console.WriteLine();
+                //    for (int j = 0; j < 8; j++)
+                //        Console.Write(chessBoard[i, j]);
+                //}
+                //Console.WriteLine();
 
-                using (System.IO.StreamWriter file =
-            new System.IO.StreamWriter(@"E:\уроки\5-Semester\ParallelProgramming\WriteLines2.txt", true))
-                {
-                    for (int i = 0; i < 8; i++)
-                    {
-                        file.WriteLine();
-                        for (int j = 0; j < 8; j++)
-                            file.Write(chessBoard[i, j]);
-                    }
-                    file.WriteLine();
-                    if (queue.Count != 0)
-                        foreach (var i in queue)
-                            file.Write(i.Value + " " + i.Key + "; ");
-                    file.WriteLine(" ");
-                }
+                //    using (System.IO.StreamWriter file =
+                //new System.IO.StreamWriter(@"E:\уроки\5-Semester\ParallelProgramming\WriteLines2.txt", true))
+                //    {
+                //        for (int i = 0; i < 8; i++)
+                //        {
+                //            file.WriteLine();
+                //            for (int j = 0; j < 8; j++)
+                //                file.Write(chessBoard[i, j]);
+                //        }
+                //        file.WriteLine();
+                //        if (queue.Count != 0)
+                //            foreach (var i in queue)
+                //                file.Write(i.Value + " " + i.Key + "; ");
+                //        file.WriteLine(" ");
+                //    }
 
             }
 
