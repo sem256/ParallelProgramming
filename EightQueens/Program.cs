@@ -15,9 +15,10 @@ namespace EightQueens
     {
         static void Main(string[] args)
         {
-            List<double> number = new List<double>();
-            EightQueen queen = new EightQueen(11);
+            //List<double> number = new List<double>();
+            EightQueen queen = new EightQueen(13);
             Stopwatch sWatch = new Stopwatch();
+            //queen.GetSolution();
             for (int i = 0; i <= 2; i++)
             {
                 sWatch.Restart();
